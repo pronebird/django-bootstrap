@@ -11,7 +11,7 @@ class NoSuchFormField(Exception):
     pass
 
 def error_list(errors):
-    return '<div class="alert">'.join(errors) + '</div>'
+    return '<div class="alert alert-error">' + u''.join(errors) + '</div>'
 
 class BootstrapMixin(object):
 
@@ -40,11 +40,15 @@ class BootstrapMixin(object):
         self.prefix_fields = []
 
         output = self.render_fields(self.layout)
+        non_field_errors = self.non_field_errors()
 
         if self.top_errors:
             errors = error_list(self.top_errors)
         else:
             errors = u''
+
+        if non_field_errors:
+            errors += error_list(non_field_errors)
 
         prefix = u''.join(self.prefix_fields)
 
@@ -123,7 +127,7 @@ class BootstrapMixin(object):
                 template = get_template(self.custom_fields[field])
             else:
                 template = select_template([
-                    os.path.join(self.template_base, 'field_%s.html' % field_instance.__class__.__name__.lower()),
+                    os.path.join(self.template_base, 'field_%s.html' % type(field_instance.widget).__name__.lower()),
                     os.path.join(self.template_base, 'field_default.html'), ])
                 
             # Finally render the field
