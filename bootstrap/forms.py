@@ -11,9 +11,7 @@ class NoSuchFormField(Exception):
     pass
 
 def error_list(errors):
-    return '<ul class="errors"><li>' + \
-           '</li><li>'.join(errors) + \
-           '</li></ul>'
+    return '<div class="alert">'.join(errors) + '</div>'
 
 class BootstrapMixin(object):
 
